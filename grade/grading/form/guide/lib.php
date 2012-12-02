@@ -157,7 +157,7 @@ class gradingform_guide_controller extends gradingform_controller {
         }
         $currentcriteria = $currentdefinition->guide_criteria;
         $criteriafields = array('sortorder', 'description', 'descriptionformat', 'descriptionmarkers',
-            'descriptionmarkersformat', 'shortname', 'maxscore');
+            'descriptionmarkersformat', 'shortname', 'maxscore','percentatge');
         foreach ($newcriteria as $id => $criterion) {
             if (preg_match('/^NEWID\d+$/', $id)) {
                 // Insert criterion into DB.
@@ -313,8 +313,8 @@ class gradingform_guide_controller extends gradingform_controller {
         $criteria = $DB->get_recordset('gradingform_guide_criteria', array('definitionid' => $this->definition->id), 'sortorder');
         foreach ($criteria as $criterion) {
             foreach (array('id', 'sortorder', 'description', 'descriptionformat',
-                           'maxscore', 'descriptionmarkers', 'descriptionmarkersformat', 'shortname') as $fieldname) {
-                if ($fieldname == 'maxscore') {  // Strip any trailing 0.
+                           'maxscore','percentatge', 'descriptionmarkers', 'descriptionmarkersformat', 'shortname') as $fieldname) {
+                if ($fieldname == 'maxscore'|| $fieldname == 'percentatge') {  // Strip any trailing 0.
                     $this->definition->guide_criteria[$criterion->id][$fieldname] = (float)$criterion->{$fieldname};
                 } else {
                     $this->definition->guide_criteria[$criterion->id][$fieldname] = $criterion->{$fieldname};
@@ -634,7 +634,7 @@ class gradingform_guide_controller extends gradingform_controller {
         $returnvalue = array('minscore' => 0, 'maxscore' => 0);
         $maxscore = 0;
         foreach ($this->get_definition()->guide_criteria as $id => $criterion) {
-            $maxscore += $criterion['maxscore'];
+            $maxscore += $criterion['maxscore']*($criterion['percentatge']/100);
         }
         $returnvalue['maxscore'] = $maxscore;
         $returnvalue['minscore'] = 0;
@@ -803,7 +803,8 @@ class gradingform_guide_instance extends gradingform_instance {
             $curscore += $record['score'];
         }
         return round(($curscore-$scores['minscore'])/($scores['maxscore']-$scores['minscore'])*
-            ($maxgrade-$mingrade), 0) + $mingrade;
+           ($maxgrade-$mingrade), 0) + $mingrade;
+       
     }
 
     /**
@@ -841,6 +842,7 @@ class gradingform_guide_instance extends gradingform_instance {
                     $a = new stdClass();
                     $a->criterianame = $criteria[$id]['shortname'];
                     $a->maxscore = $criteria[$id]['maxscore'];
+                    $a->percentatge = $criteria[$id]['percentatge'];
                     $html .= html_writer::tag('div', get_string('err_scoreinvalid', 'gradingform_guide', $a),
                         array('class' => 'gradingform_guide-error'));
                 }

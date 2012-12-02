@@ -59,6 +59,8 @@ class gradingform_guide_editguide extends moodleform {
         $form->addElement('editor', 'description_editor', get_string('description'), null, $options);
         $form->setType('description_editor', PARAM_RAW);
 
+         
+        
         // Guide completion status.
         $choices = array();
         $choices[gradingform_controller::DEFINITION_STATUS_DRAFT]    = html_writer::tag('span',
@@ -70,6 +72,9 @@ class gradingform_guide_editguide extends moodleform {
         // Guide editor.
         $element = $form->addElement('guideeditor', 'guide', get_string('pluginname', 'gradingform_guide'));
         $form->setType('guide', PARAM_RAW);
+        
+        
+
 
         $buttonarray = array();
         $buttonarray[] = &$form->createElement('submit', 'saveguide', get_string('saveguide', 'gradingform_guide'));

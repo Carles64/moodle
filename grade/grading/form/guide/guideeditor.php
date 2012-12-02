@@ -184,6 +184,7 @@ class moodlequickform_guideeditor extends HTML_QuickForm_input {
         // Iterate through criteria.
         $lastaction = null;
         $lastid = null;
+        $suma = 0;
         foreach ($value['criteria'] as $id => $criterion) {
             if ($id == 'addcriterion') {
                 $id = $this->get_next_id(array_keys($value['criteria']));
@@ -202,6 +203,16 @@ class moodlequickform_guideeditor extends HTML_QuickForm_input {
                 } else if (!is_numeric($criterion['maxscore']) || $criterion['maxscore'] < 0) {
                     $errors['err_maxscorenotnumeric'] = 1;
                     $criterion['error_description'] = true;
+                }
+                if (!strlen(trim($criterion['percentatge']))) {
+                    $errors['err_nopercentatge'] = 1;
+                    $criterion['error_description'] = true;
+                } else if (!is_numeric($criterion['percentatge']) || $criterion['percentatge'] < 0 || $criterion['percentatge'] > 100) {
+                    $errors['err_percentatgenotnumeric'] = 1;
+                    $criterion['error_description'] = true;
+                }
+                else {
+                    $suma = $suma + $criterion['percentatge'];
                 }
             }
             if (array_key_exists('moveup', $criterion) || $lastaction == 'movedown') {
@@ -229,7 +240,12 @@ class moodlequickform_guideeditor extends HTML_QuickForm_input {
                 $lastid = $id;
             }
         }
-
+        if ($suma != 100) 
+        {
+            $errors['err_suma100'] = 1;
+            $criterion['error_description'] = true;
+        }
+        
         // Add sort order field to criteria.
         $csortorder = 1;
         foreach (array_keys($return['criteria']) as $id) {

@@ -52,7 +52,7 @@ M.gradingform_guideeditor.clickanywhere = function(e) {
     }
     // if clicked on description item and this item is not enabled - enable it
     var container = null
-    if ((container = el.ancestor('.criterionname')) || (container = el.ancestor('.criterionmaxscore'))) {
+    if (((container = el.ancestor('.criterionname')) || (container = el.ancestor('.criterionmaxscore')))|| (container = el.ancestor('.criterionpercentatge'))) {
         el = container.one('input[type=text]')
     } else if ((container = el.ancestor('.criteriondesc')) || (container = el.ancestor('.criteriondescmarkers'))) {
         el = container.one('textarea')
@@ -128,11 +128,15 @@ M.gradingform_guideeditor.editmode = function(el, editmode) {
             if (ta.get('name').indexOf('[maxscore]') > 1) {
                 ta.setStyle('width', '25px');
             } else {
+                if (ta.get('name').indexOf('[percentatge]') > 1) {
+                ta.setStyle('width', '25px');
+            } else {
                 var width = parseFloat(ta.get('parentNode').getComputedStyle('width'))-10,
                     height = parseFloat(ta.get('parentNode').getComputedStyle('height'))
                 ta.setStyle('width', Math.max(width,50)+'px')
                 ta.setStyle('height', Math.max(height,30)+'px')
             }
+        }
         }
         catch (err) {
             // this browser do not support 'computedStyle', leave the default size of the textbox

@@ -66,9 +66,10 @@ class gradingform_guide_renderer extends plugin_renderer_base {
                                'class' => '{CRITERION-class}',
                                'descriptionmarkers' => '{CRITERION-descriptionmarkers}',
                                'shortname' => '{CRITERION-shortname}',
-                               'maxscore' => '{CRITERION-maxscore}');
+                               'maxscore' => '{CRITERION-maxscore}',
+                                'percentatge' => '{CRITERION-percentatge}');
         } else {
-            foreach (array('sortorder', 'description', 'class', 'shortname', 'descriptionmarkers', 'maxscore') as $key) {
+            foreach (array('sortorder', 'description', 'class', 'shortname', 'descriptionmarkers', 'maxscore','percentatge') as $key) {
                 // Set missing array elements to empty strings to avoid warnings.
                 if (!array_key_exists($key, $criterion)) {
                     $criterion[$key] = '';
@@ -109,6 +110,12 @@ class gradingform_guide_renderer extends plugin_renderer_base {
                 'value' => htmlspecialchars($criterion['maxscore']),
                 'id' => '{NAME}[criteria][{CRITERION-id}][maxscore]'));
             $maxscore = html_writer::tag('div', $maxscore, array('class'=>'criterionmaxscore'));
+            
+            $percentatge = html_writer::empty_tag('input', array('type'=> 'text',
+                'name' => '{NAME}[criteria][{CRITERION-id}][percentatge]', 'size' => '3',
+                'value' => htmlspecialchars($criterion['percentatge']),
+                'id' => '{NAME}[criteria][{CRITERION-id}][percentatge]'));
+            $percentatge = html_writer::tag('div', $percentatge, array('class'=>'criterionpercentatge'));
         } else {
             if ($mode == gradingform_guide_controller::DISPLAY_EDIT_FROZEN) {
                 $criteriontemplate .= html_writer::empty_tag('input', array('type' => 'hidden',
@@ -121,6 +128,8 @@ class gradingform_guide_renderer extends plugin_renderer_base {
                     'name' => '{NAME}[criteria][{CRITERION-id}][descriptionmarkers]', 'value' => $criterion['descriptionmarkers']));
                 $criteriontemplate .= html_writer::empty_tag('input', array('type' => 'hidden',
                     'name' => '{NAME}[criteria][{CRITERION-id}][maxscore]', 'value' => $criterion['maxscore']));
+                $criteriontemplate .= html_writer::empty_tag('input', array('type' => 'hidden',
+                    'name' => '{NAME}[criteria][{CRITERION-id}][percentatge', 'value' => $criterion['percentatge']));
             } else if ($mode == gradingform_guide_controller::DISPLAY_EVAL ||
                        $mode == gradingform_guide_controller::DISPLAY_VIEW) {
                 $descriptionclass = 'descriptionreadonly';
@@ -129,6 +138,8 @@ class gradingform_guide_renderer extends plugin_renderer_base {
                 array('class'=>'criterionshortname', 'name' => '{NAME}[criteria][{CRITERION-id}][shortname]'));
             $descmarkerclass = '';
             $descstudentclass = '';
+            $maxscoreclass = '';
+            $percentatgeclass = '';
             if ($mode == gradingform_guide_controller::DISPLAY_EVAL) {
                 if (!get_user_preferences('gradingform_guide-showmarkerdesc', true)) {
                     $descmarkerclass = ' hide';
@@ -144,7 +155,11 @@ class gradingform_guide_renderer extends plugin_renderer_base {
                 array('class'=>'criteriondescriptionmarkers'.$descmarkerclass,
                       'name' => '{NAME}[criteria][{CRITERION-id}][descriptionmarkers]'));
             $maxscore   = html_writer::tag('div', $criterion['maxscore'],
-                array('class'=>'criteriondescriptionscore', 'name' => '{NAME}[criteria][{CRITERION-id}][maxscore]'));
+                array('class'=>'criteriondescriptionscore'.$maxscoreclass,
+                      'name' => '{NAME}[criteria][{CRITERION-id}][maxscore]'));
+            $percentatge   = html_writer::tag('div', $criterion['percentatge'],
+                array('class'=>'criteriondescriptionpercentatge'.$percentatgeclass,
+                      'name' => '{NAME}[criteria][{CRITERION-id}][percentatge]'));
         }
 
         if (isset($criterion['error_description'])) {
@@ -165,6 +180,9 @@ class gradingform_guide_renderer extends plugin_renderer_base {
             $title .=  html_writer::tag('label', get_string('maxscore', 'gradingform_guide'),
                 array('for'=>'{NAME}[criteria][{CRITERION-id}][maxscore]'));
             $title .= $maxscore;
+            $title .=  html_writer::tag('label', get_string('percentatge', 'gradingform_guide'),
+                array('for'=>'{NAME}[criteria][{CRITERION-id}][percentatge]'));
+            $title .= $percentatge;
         } else if ($mode == gradingform_guide_controller::DISPLAY_PREVIEW_GRADED ||
                    $mode == gradingform_guide_controller::DISPLAY_VIEW) {
             $title .= $description;
@@ -199,8 +217,10 @@ class gradingform_guide_renderer extends plugin_renderer_base {
                 'id' => '{NAME}[criteria][{CRITERION-id}][score]',
                 'size' => '3', 'value' => htmlspecialchars($currentscore)));
             $score .= '/'.$maxscore;
-
             $criteriontemplate .= html_writer::tag('td', $score, array('class' => 'score'));
+            $percentatge = html_writer::tag('label', get_string('percentatge', 'gradingform_guide'),
+                array('for'=>'{NAME}[criteria][{CRITERION-id}][percentatge]', 'class' => $percentatgeclass));
+            $criteriontemplate .= html_writer::tag('td', $percentatge, array('class' => 'percentatge'));
         } else if ($mode == gradingform_guide_controller::DISPLAY_EVAL_FROZEN) {
             $criteriontemplate .= html_writer::empty_tag('input', array('type' => 'hidden',
                 'name' => '{NAME}[criteria][{CRITERION-id}][remark]', 'value' => $currentremark));

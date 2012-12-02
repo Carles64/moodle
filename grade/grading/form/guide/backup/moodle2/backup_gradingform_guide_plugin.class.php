@@ -54,7 +54,7 @@ class backup_gradingform_guide_plugin extends backup_gradingform_plugin {
 
         $criterion = new backup_nested_element('guidecriterion', array('id'), array(
             'sortorder', 'shortname', 'description', 'descriptionformat',
-            'descriptionmarkers', 'descriptionmarkersformat', 'maxscore'));
+            'descriptionmarkers', 'descriptionmarkersformat', 'maxscore','percentatge'));
 
         $comments = new backup_nested_element('guidecomments');
 

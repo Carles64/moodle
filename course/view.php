@@ -34,7 +34,7 @@
     }
 
     $course = $DB->get_record('course', $params, '*', MUST_EXIST);
-
+    echo("PRUEBA2");
     $urlparams = array('id' => $course->id);
 
     // Sectionid should get priority over section number
@@ -228,7 +228,7 @@
     $PAGE->set_title(get_string('course') . ': ' . $course->fullname);
     $PAGE->set_heading($course->fullname);
     echo $OUTPUT->header();
-
+   
     if ($completion->is_enabled() && ajaxenabled()) {
         // This value tracks whether there has been a dynamic change to the page.
         // It is used so that if a user does this - (a) set some tickmarks, (b)
