@@ -15,7 +15,7 @@
                 <FIELD NAME="descriptionmarkers" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Description for Markers" PREVIOUS="descriptionformat" NEXT="descriptionmarkersformat"/>
                 <FIELD NAME="descriptionmarkersformat" TYPE="int" LENGTH="2" NOTNULL="false" SEQUENCE="false" PREVIOUS="descriptionmarkers" NEXT="maxscore"/>
                 <FIELD NAME="maxscore" TYPE="number" LENGTH="10" NOTNULL="true" SEQUENCE="false" DECIMALS="5" COMMENT="maximum grade that can be assigned using this criterion" PREVIOUS="descriptionmarkersformat" NEXT="percentatge"/>
-                <FIELD NAME="percentatge" TYPE="number" LENGTH="4" NOTNULL="true" SEQUENCE="false" DECIMALS="5" COMMENT="percentatge associated to this criterion" PREVIOUS="maxscore"/>
+                <FIELD NAME="percentatge" TYPE="number" LENGTH="10" NOTNULL="true" SEQUENCE="false" DECIMALS="5" COMMENT="percentatge associated to this criterion" PREVIOUS="maxscore"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="fk_definitionid"/>
