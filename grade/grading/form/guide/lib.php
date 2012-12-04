@@ -160,10 +160,6 @@ class gradingform_guide_controller extends gradingform_controller {
             'descriptionmarkersformat', 'shortname', 'maxscore', 'percentatge');
         foreach ($newcriteria as $id => $criterion) {
             if (preg_match('/^NEWID\d+$/', $id)) {
-                //echo("maxscore");
-                //echo($criterion['maxscore']);
-                //echo("percentatge");
-                //echo($criterion['percentatge']);
                 // Insert criterion into DB.
                 $data = array('definitionid' => $this->definition->id, 'descriptionformat' => FORMAT_MOODLE,
                     'descriptionmarkersformat' => FORMAT_MOODLE); // TODO format is not supported yet.
@@ -173,10 +169,6 @@ class gradingform_guide_controller extends gradingform_controller {
                     }
                 }
                 if ($doupdate) {
-                    //echo("guardando p");
-                    //echo($data['percentatge']);
-                    //echo("guardando s");
-                    //echo($data['maxscore']);
                     $id = $DB->insert_record('gradingform_guide_criteria', $data);
                 }
                 $haschanges[5] = true;
@@ -324,7 +316,6 @@ class gradingform_guide_controller extends gradingform_controller {
                            'maxscore', 'descriptionmarkers', 'descriptionmarkersformat', 'shortname','percentatge') as $fieldname) {
                 if ($fieldname == 'maxscore'|| $fieldname == 'percentatge') {  // Strip any trailing 0.
                     $this->definition->guide_criteria[$criterion->id][$fieldname] = (float)$criterion->{$fieldname};
-                    //echo("Cargando"+$this->definition->guide_criteria[$criterion->id]['percentatge']);
                 } else {
                     $this->definition->guide_criteria[$criterion->id][$fieldname] = $criterion->{$fieldname};
                 }
@@ -644,9 +635,7 @@ class gradingform_guide_controller extends gradingform_controller {
         $maxscore = 0;
         foreach ($this->get_definition()->guide_criteria as $id => $criterion) {
             $maxscore += $criterion['maxscore']*($criterion['percentatge']/100);
-            //echo($criterion['maxscore']*$criterion['percentatge']/100);
         }
-        echo($criterion['maxscore']);
         $returnvalue['maxscore'] = $maxscore;
         $returnvalue['minscore'] = 0;
         if (!empty($this->moduleinstance->grade)) {
@@ -814,12 +803,9 @@ class gradingform_guide_instance extends gradingform_instance {
         $i=0;
         $j=0;
         foreach ($grade['criteria'] as $record) {
-            //echo ("antes segun for");
             foreach ($this->get_controller()->get_definition()->guide_criteria as $id => $criterion) {
-                //echo("antes del if");
                 if($i==$j)
                 {
-                    //echo("enta en la comparacion");
                     $curscore += $record['score']*($criterion['percentatge']/100);
                 }
                 $j=$j+1;
